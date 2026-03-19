@@ -81,7 +81,7 @@ const About = () => {
             </div>
             
             <p className="text-secondary leading-relaxed font-mono text-sm md:text-base">
-              I'm a 1st-year B.Tech Engineering student and a Software Engineer Intern 
+              I'm a 2nd-year B.Tech Engineering student and a Software Engineer Intern 
               with hands-on experience in full-stack development, API testing, and 
               cybersecurity fundamentals. I've built real-world platforms like MoveCare 
               (a healthcare consultation app) and a Campus Navigation System — and I'm driven 
