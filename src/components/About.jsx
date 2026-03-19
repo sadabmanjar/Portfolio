@@ -110,7 +110,7 @@ const About = () => {
           }}
           className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-20"
         >
-          <StatCard number="1" suffix="st" label="Year B.Tech" />
+          <StatCard number="2" suffix="nd" label="Year B.Tech" />
           <StatCard number="3" suffix="+" label="Projects Built" />
           <StatCard number="2" suffix="" label="Work Experiences" />
           <StatCard number="3" label="Certifications" />

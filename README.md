@@ -6,7 +6,7 @@
 
 _Building scalable digital systems that solve real-world problems._
 
-[![Portfolio](https://img.shields.io/badge/🌐_Live_Portfolio-sadabmanjar.github.io-00e5ff?style=for-the-badge&labelColor=050508)](https://sadabmanjar.github.io)
+[![Portfolio](https://img.shields.io/badge/🌐_Live_Portfolio-https://sadabportfolio.vercel.app/-00e5ff?style=for-the-badge&labelColor=050508)](https://sadabmanjar.github.io)
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-md--sadab--manjar-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/md-sadab-manjar)
 [![GitHub](https://img.shields.io/badge/GitHub-sadabmanjar-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/sadabmanjar)
 [![Email](https://img.shields.io/badge/Email-mdsadabmanjar786@gmail.com-D14836?style=for-the-badge&logo=gmail&logoColor=white)](mailto:mdsadabmanjar786@gmail.com)
