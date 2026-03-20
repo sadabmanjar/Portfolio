@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { useTypewriter } from '../hooks/useTypewriter';
 import { portfolioData } from '../data/portfolio';
+import CyberButton from './ui/CyberButton';
 
 const Hero = () => {
   const { personal } = portfolioData;
@@ -56,7 +57,7 @@ const Hero = () => {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.2 }}
-          className="font-orbitron text-5xl md:text-8xl font-black text-primary mb-4 tracking-tighter"
+          className="font-orbitron text-4xl sm:text-6xl md:text-8xl font-black text-primary mb-4 tracking-tighter"
         >
           <span className="glitch-text block text-primary" data-text={personal.name.toUpperCase()}>
             {personal.name.toUpperCase()}
@@ -79,7 +80,7 @@ const Hero = () => {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.5 }}
-          className="text-secondary text-sm md:text-lg max-w-xl mx-auto mb-10 leading-relaxed font-mono"
+          className="text-secondary text-sm md:text-lg max-w-xs sm:max-w-xl mx-auto mb-10 leading-relaxed font-mono"
         >
           {personal.tagline}
         </motion.p>
@@ -89,24 +90,29 @@ const Hero = () => {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.6 }}
-          className="flex flex-col sm:flex-row gap-4 justify-center"
+          className="flex flex-col sm:flex-row gap-4 justify-center items-center"
         >
-          <button 
-            onClick={() => document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' })}
-            className="bg-accent-cyan text-black font-orbitron font-bold px-8 py-4 hover:shadow-neon-cyan transition-all duration-300 relative group overflow-hidden"
+          <CyberButton
+            variant="primary"
+            onClick={() => document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}
           >
-            <span className="relative z-10">VIEW MY WORK →</span>
-            <div className="absolute inset-0 bg-white/20 translate-x-full group-hover:translate-x-0 transition-transform duration-300" />
-          </button>
-          
-          <a 
-            href={personal.resumeUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="border border-accent-cyan/50 text-accent-cyan font-orbitron px-8 py-4 hover:bg-accent-cyan/10 transition-all duration-300 flex items-center justify-center gap-2"
+            <span className="flex items-center gap-2">
+              View My Work
+              <motion.span
+                animate={{ x: [0, 4, 0] }}
+                transition={{ repeat: Infinity, duration: 1.5 }}
+              >→</motion.span>
+            </span>
+          </CyberButton>
+
+          <CyberButton
+            variant="ghost"
+            onClick={() => window.open('/resume.pdf', '_blank')}
           >
-            DOWNLOAD RESUME
-          </a>
+            <span className="flex items-center gap-2">
+              ↓ Download Resume
+            </span>
+          </CyberButton>
         </motion.div>
       </div>
 

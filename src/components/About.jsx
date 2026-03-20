@@ -29,7 +29,7 @@ const About = () => {
   return (
     <section id="about" className="min-height-screen bg-bg-main px-6 md:px-16 py-24 overflow-hidden">
       <div className="max-w-7xl mx-auto">
-        <div className="grid md:grid-cols-2 gap-12 items-center">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
           
           {/* Left Column - Avatar */}
           <motion.div 
@@ -39,7 +39,7 @@ const About = () => {
             transition={{ duration: 0.8 }}
             className="relative justify-self-center md:justify-self-start"
           >
-            <div className="relative w-[280px] h-[280px] border-2 border-accent-cyan/50 bg-bg-card rounded-lg flex items-center justify-center overflow-hidden">
+            <div className="relative w-48 h-48 sm:w-64 sm:h-64 md:w-72 md:h-72 border-2 border-accent-cyan/50 bg-bg-card rounded-lg flex items-center justify-center overflow-hidden">
               {/* Scanline Effect */}
               <div className="absolute inset-0 pointer-events-none z-10 opacity-20" 
                    style={{ 
@@ -108,7 +108,7 @@ const About = () => {
               }
             }
           }}
-          className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-20"
+          className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-20"
         >
           <StatCard number="2" suffix="nd" label="Year B.Tech" />
           <StatCard number="3" suffix="+" label="Projects Built" />

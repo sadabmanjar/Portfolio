@@ -8,7 +8,7 @@ const SkillCategory = ({ category, items }) => {
       <h3 className="text-xs text-accent-purple uppercase tracking-[0.3em] font-bold">
         {category}
       </h3>
-      <div className="flex flex-wrap gap-3">
+      <div className="flex flex-wrap gap-2 sm:gap-3">
         {items.map((skill, index) => (
           <motion.div
             key={skill.name}
@@ -50,7 +50,7 @@ const Skills = () => {
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, margin: "-100px" }}
-          className="grid md:grid-cols-2 gap-x-20 gap-y-16"
+          className="grid grid-cols-1 md:grid-cols-2 gap-x-20 gap-y-12 md:gap-y-16"
         >
           {skills.map((category) => (
             <SkillCategory 

@@ -1,71 +1,104 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { portfolioData } from '../data/portfolio';
+import TiltCard from './ui/TiltCard';
 
 const ProjectCard = ({ project }) => {
   return (
-    <motion.div
-      variants={{
-        hidden: { y: 40, opacity: 0 },
-        visible: { y: 0, opacity: 1 }
-      }}
-      className="group relative bg-bg-card border border-border-main rounded-lg p-6 flex flex-col h-full hover:border-accent-cyan/50 hover:shadow-neon-cyan transition-all duration-300 hover:-translate-y-1"
-    >
-      {/* Top Bar */}
-      <div className="flex justify-between items-center mb-4">
-        <div className="text-accent-cyan">
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" />
-          </svg>
+    <TiltCard className="bg-bg-card border border-border-main rounded-lg overflow-hidden flex flex-col hover:border-accent-cyan/50 transition-colors duration-300">
+      {/* Image with zoom */}
+      <div className="overflow-hidden h-48 w-full flex-shrink-0">
+        <motion.img
+          src={
+            project.image ||
+            `https://placehold.co/400x200/0d0d18/00e5ff?text=${encodeURIComponent(project.title)}`
+          }
+          alt={project.title}
+          className="w-full h-full object-cover"
+          whileHover={{ scale: 1.12 }}
+          transition={{ duration: 0.4, ease: 'easeOut' }}
+        />
+      </div>
+
+      {/* Card body */}
+      <motion.div
+        variants={{
+          hidden: { y: 40, opacity: 0 },
+          visible: { y: 0, opacity: 1 },
+        }}
+        className="flex flex-col flex-grow p-6"
+      >
+        {/* Top Bar */}
+        <div className="flex justify-between items-center mb-4">
+          <span className="text-accent-cyan text-xl">📁</span>
+          {project.featured && (
+            <span className="text-[10px] uppercase font-bold tracking-widest bg-accent-purple/20 text-accent-purple border border-accent-purple/30 px-2 py-0.5 rounded">
+              [ FEATURED ]
+            </span>
+          )}
         </div>
-        {project.featured && (
-          <span className="text-[10px] uppercase font-bold tracking-widest bg-accent-purple/20 text-accent-purple border border-accent-purple/30 px-2 py-0.5 rounded">
-            [ FEATURED ]
-          </span>
-        )}
-      </div>
 
-      {/* Content */}
-      <h3 className="font-orbitron text-lg text-primary group-hover:text-accent-cyan transition-colors duration-300">
-        {project.title}
-      </h3>
-      
-      <p className="text-secondary text-sm mt-3 line-clamp-3 leading-relaxed flex-grow">
-        {project.description}
-      </p>
+        {/* Content */}
+        <h3 className="font-orbitron text-lg text-primary group-hover:text-accent-cyan transition-colors duration-300">
+          {project.title}
+        </h3>
 
-      {/* Tech Tags */}
-      <div className="flex flex-wrap gap-2 mt-6">
-        {project.tags.map(tag => (
-          <span 
-            key={tag} 
-            className="text-[10px] font-mono bg-accent-cyan/10 text-accent-cyan border border-accent-cyan/20 px-2 py-0.5 rounded"
+        <p className="text-secondary text-sm mt-3 line-clamp-3 leading-relaxed flex-grow">
+          {project.description}
+        </p>
+
+        {/* Tech Tags */}
+        <div className="flex flex-wrap gap-2 mt-6">
+          {project.tags.map((tag) => (
+            <span
+              key={tag}
+              className="text-[10px] font-mono bg-accent-cyan/10 text-accent-cyan border border-accent-cyan/20 px-2 py-0.5 rounded"
+            >
+              {tag}
+            </span>
+          ))}
+        </div>
+
+        {/* Links */}
+        <div className="flex gap-4 mt-8 pt-4 border-t border-white/5">
+          <motion.a
+            href={project.github}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-1 text-sm text-secondary hover:text-primary font-mono"
+            whileHover={{ x: 3 }}
+            whileTap={{ scale: 0.95 }}
           >
-            {tag}
-          </span>
-        ))}
-      </div>
+            GitHub
+            <motion.span
+              className="inline-block text-[10px]"
+              animate={{ x: [0, 3, 0] }}
+              transition={{ repeat: Infinity, duration: 1.5 }}
+            >
+              ↗
+            </motion.span>
+          </motion.a>
 
-      {/* Links */}
-      <div className="flex gap-4 mt-8 pt-4 border-t border-white/5">
-        <a 
-          href={project.github} 
-          target="_blank" 
-          rel="noopener noreferrer"
-          className="text-xs font-mono text-secondary hover:text-primary flex items-center gap-1 transition-colors"
-        >
-          GITHUB <span className="text-[10px]">↗</span>
-        </a>
-        <a 
-          href={project.demo} 
-          target="_blank" 
-          rel="noopener noreferrer"
-          className="text-xs font-mono text-accent-cyan hover:text-primary flex items-center gap-1 transition-colors"
-        >
-          LIVE DEMO <span className="text-[10px]">↗</span>
-        </a>
-      </div>
-    </motion.div>
+          <motion.a
+            href={project.demo}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-1 text-sm text-accent-cyan font-mono"
+            whileHover={{ x: 3, textShadow: '0 0 8px rgba(0,229,255,0.8)' }}
+            whileTap={{ scale: 0.95 }}
+          >
+            Live Demo
+            <motion.span
+              className="inline-block text-[10px]"
+              animate={{ x: [0, 3, 0] }}
+              transition={{ repeat: Infinity, duration: 1.2 }}
+            >
+              ↗
+            </motion.span>
+          </motion.a>
+        </div>
+      </motion.div>
+    </TiltCard>
   );
 };
 
@@ -77,16 +110,16 @@ const Projects = () => {
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.1
-      }
-    }
+        staggerChildren: 0.1,
+      },
+    },
   };
 
   return (
     <section id="projects" className="bg-bg-main py-24 px-6 md:px-16">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <motion.div 
+        <motion.div
           initial={{ y: 20, opacity: 0 }}
           whileInView={{ y: 0, opacity: 1 }}
           viewport={{ once: true }}
@@ -101,8 +134,8 @@ const Projects = () => {
           variants={containerVariants}
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: true, margin: "-100px" }}
-          className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6"
+          viewport={{ once: true, margin: '-100px' }}
+          className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6"
         >
           {projects.map((project) => (
             <ProjectCard key={project.id} project={project} />

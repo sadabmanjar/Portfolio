@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { portfolioData } from '../data/portfolio';
+import TiltCard from './ui/TiltCard';
 
 const Certifications = () => {
   const { certifications } = portfolioData;
@@ -47,11 +48,11 @@ const Certifications = () => {
           className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4"
         >
           {certifications.map((cert, index) => (
-            <motion.div
-              key={index}
-              variants={itemVariants}
-              className="bg-bg-card border border-border-main rounded-lg p-5 group hover:border-accent-cyan/30 hover:shadow-neon-cyan transition-all duration-300 relative overflow-hidden"
-            >
+            <TiltCard key={index}>
+              <motion.div
+                variants={itemVariants}
+                className="bg-bg-card border border-border-main rounded-lg p-5 group hover:border-accent-cyan/30 hover:shadow-neon-cyan transition-all duration-300 relative overflow-hidden h-full"
+              >
               {/* Checkmark Badge */}
               <div className="absolute top-4 right-4 text-emerald-500 bg-emerald-500/10 p-1 rounded-full border border-emerald-500/20 opacity-40 group-hover:opacity-100 transition-opacity">
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3" viewBox="0 0 20 20" fill="currentColor">
@@ -73,7 +74,8 @@ const Certifications = () => {
                   {cert.description}
                 </p>
               )}
-            </motion.div>
+              </motion.div>
+            </TiltCard>
           ))}
         </motion.div>
       </div>

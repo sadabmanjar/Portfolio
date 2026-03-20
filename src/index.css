@@ -31,6 +31,8 @@
 @layer base {
   html {
     scroll-behavior: smooth;
+    overflow-x: hidden;
+    width: 100%;
   }
 
   body {
@@ -39,6 +41,12 @@
     @apply font-mono antialiased;
     cursor: none;
     transition: background-color 0.3s ease, color 0.3s ease;
+    overflow-x: hidden;
+    width: 100%;
+  }
+
+  * {
+    -webkit-overflow-scrolling: touch;
   }
 
   /* Custom Scrollbar */
@@ -144,5 +152,38 @@
 
   .animate-pulse-glow {
     animation: pulse 2s infinite;
+  }
+
+  /* ── CyberButton ── */
+  @keyframes borderRun {
+    0%   { background-position: 0% 50%; }
+    100% { background-position: 200% 50%; }
+  }
+
+  @keyframes ripple {
+    to { transform: scale(4); opacity: 0; }
+  }
+
+  .cyber-btn {
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+  }
+
+  .cyber-btn::before {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    border-radius: inherit;
+    background: linear-gradient(90deg, #00e5ff, #9b59ff, #00ff88, #00e5ff);
+    background-size: 300%;
+    animation: borderRun 2.5s linear infinite;
+    z-index: -1;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  .cyber-btn:hover::before {
+    opacity: 1;
   }
 }

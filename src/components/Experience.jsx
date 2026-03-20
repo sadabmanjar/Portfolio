@@ -8,7 +8,7 @@ const ExperienceItem = ({ exp, index }) => {
   return (
     <div className="relative mb-12 md:mb-24 last:mb-0">
       {/* Timeline Connector Dot */}
-      <div className="absolute left-[20px] md:left-1/2 top-6 w-3 h-3 bg-cyber-cyan rounded-full -translate-x-1/2 z-10 animate-pulse-glow shadow-[0_0_10px_rgba(0,245,255,0.8)]" />
+      <div className="absolute left-[8px] md:left-1/2 top-6 w-3 h-3 bg-cyber-cyan rounded-full -translate-x-1/2 z-10 animate-pulse-glow shadow-[0_0_10px_rgba(0,245,255,0.8)]" />
 
       <div className={`flex flex-col md:flex-row items-center w-full ${isLeft ? 'md:flex-row-reverse' : ''}`}>
         {/* Spacer for Desktop */}
@@ -20,7 +20,7 @@ const ExperienceItem = ({ exp, index }) => {
           whileInView={{ x: 0, opacity: 1 }}
           viewport={{ once: true, margin: "-100px" }}
           transition={{ duration: 0.6, ease: "easeOut" }}
-          className={`w-full md:w-1/2 overflow-hidden ${isLeft ? 'md:pr-12' : 'md:pl-12'} pl-12 md:pl-0`}
+          className={`w-full md:w-1/2 overflow-hidden ${isLeft ? 'md:pr-12' : 'md:pl-12'} pl-8 md:pl-0`}
         >
           <div className="bg-bg-card border border-cyber-cyan/15 hover:border-cyber-cyan/30 transition-colors duration-300 rounded-lg p-6 relative group">
              {/* Decorative side accent */}
@@ -65,7 +65,7 @@ const Experience = () => {
 
         <div className="relative">
           {/* Vertical Center Line */}
-          <div className="absolute left-[20px] md:left-1/2 top-0 bottom-0 w-[1px] bg-cyber-cyan/20 -translate-x-1/2" />
+          <div className="absolute left-[8px] md:left-1/2 top-0 bottom-0 w-[1px] bg-cyber-cyan/20 -translate-x-1/2" />
 
           <div className="space-y-4">
             {experience.map((exp, index) => (
