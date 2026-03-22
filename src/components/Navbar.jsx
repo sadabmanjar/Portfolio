@@ -1,183 +1,354 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTheme } from '../context/ThemeContext';
 
+const navLinks = [
+  { id: 'hero',       label: 'Home'       },
+  { id: 'about',      label: 'About'      },
+  { id: 'skills',     label: 'Skills'     },
+  { id: 'projects',   label: 'Projects'   },
+  { id: 'experience', label: 'Experience' },
+  { id: 'contact',    label: 'Contact'    },
+];
+
 const Navbar = () => {
-  const { isDark, toggleTheme } = useTheme();
-  const [isOpen, setIsOpen] = useState(false);
+  const { toggleTheme } = useTheme();
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('hero');
   const [scrolled, setScrolled] = useState(false);
+  
+  // To ignore intersection observer during smooth scrolling
+  const scrollLocked = useRef(false);
+  const scrollTimeout = useRef(null);
 
-  const navLinks = [
-    { name: 'Home', id: 'hero' },
-    { name: 'About', id: 'about' },
-    { name: 'Skills', id: 'skills' },
-    { name: 'Projects', id: 'projects' },
-    { name: 'Experience', id: 'experience' },
-    { name: 'Contact', id: 'contact' },
-  ];
+  // Theme detection state
+  const [isDark, setIsDark] = useState(
+    document.documentElement.classList.contains('dark')
+  );
 
   useEffect(() => {
+    // Sync isDark when document class changes
+    const observer = new MutationObserver(() => {
+      setIsDark(document.documentElement.classList.contains('dark'));
+    });
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+    
+    // Initial scroll check
     const handleScroll = () => {
-      setScrolled(window.scrollY > 50);
-      
-      const sections = ['hero', ...navLinks.map(l => l.id)];
-      const current = sections.find(section => {
-        const el = document.getElementById(section);
-        if (el) {
-          const rect = el.getBoundingClientRect();
-          return rect.top >= -100 && rect.top <= 400;
-        }
-        return false;
-      });
-      if (current) setActiveSection(current);
+      setScrolled(window.scrollY > 40);
+      // Forced Home check
+      if (window.scrollY < 120 && !scrollLocked.current) {
+        setActiveSection('hero');
+      }
     };
-
     window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    
+    return () => {
+      observer.disconnect();
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+
+  useEffect(() => {
+    const observers = navLinks.map(({ id }) => {
+      const el = document.getElementById(id);
+      if (!el) return null;
+      const obs = new IntersectionObserver(
+        (entries) => { 
+          entries.forEach(e => {
+            if (e.isIntersecting && !scrollLocked.current) {
+              setActiveSection(id);
+            }
+          });
+        },
+        // Threshold: High enough to avoid accidental flickers
+        { threshold: 0.25, rootMargin: '-10% 0px -40% 0px' }
+      );
+      obs.observe(el);
+      return obs;
+    });
+    return () => observers.forEach(o => o?.disconnect());
   }, []);
 
   const handleNavClick = (e, id) => {
     e.preventDefault();
-    const section = document.getElementById(id);
-    if (section) {
-      section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    scrollLocked.current = true;
+    setActiveSection(id);
+    
+    if (scrollTimeout.current) clearTimeout(scrollTimeout.current);
+    
+    const element = document.getElementById(id);
+    if(element) {
+      const headerOffset = 0;
+      const elementPosition = element.getBoundingClientRect().top;
+      const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: 'smooth'
+      });
     }
-    setIsOpen(false);
+
+    setIsMenuOpen(false);
+
+    // Increase lock time so it doesn't snap back while scrolling far
+    scrollTimeout.current = setTimeout(() => {
+      scrollLocked.current = false;
+    }, 1200);
   };
 
+  // Dark mode glass values
+  const darkGlass = {
+    base:         'rgba(5, 5, 8, 0.45)',
+    scrolled:     'rgba(5, 5, 8, 0.75)',
+    border:       'rgba(0, 229, 255, 0.12)',
+    borderScroll: 'rgba(0, 245, 255, 0.25)',
+    shadow:       '0 4px 30px rgba(0,0,0,0.5), inset 0 1px 0 rgba(0,229,255,0.08)',
+  };
+
+  // Light mode glass values
+  const lightGlass = {
+    base:         'rgba(255, 255, 255, 0.25)',
+    scrolled:     'rgba(255, 255, 255, 0.45)',
+    border:       'rgba(0, 180, 220, 0.2)',
+    borderScroll: 'rgba(0, 180, 220, 0.4)',
+    shadow:       '0 4px 30px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.6)',
+  };
+
+  const glass = isDark ? darkGlass : lightGlass;
+
   return (
-    <motion.nav
-      initial={{ y: -100, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      className={`fixed top-3 left-3 right-3 md:left-1/2 md:-translate-x-1/2 md:w-auto md:max-w-3xl z-50 transition-all duration-300 border border-border-main/50 rounded-full ${
-        scrolled ? 'bg-bg-card/80 backdrop-blur-lg py-2 px-6 shadow-lg' : 'bg-transparent py-4 px-6'
-      }`}
-    >
-      <div className="max-w-7xl mx-auto px-6 flex justify-between items-center">
-        {/* Logo */}
-        <div 
-          onClick={(e) => handleNavClick(e, 'hero')}
-          className="font-orbitron text-xl text-accent-cyan cursor-pointer flex items-center gap-2 group"
-        >
-          <span className="text-accent-purple group-hover:text-accent-cyan transition-colors">&lt;</span>
-          <span className="text-primary">SadabManjar</span>
-          <span className="text-accent-purple group-hover:text-accent-cyan transition-colors">/&gt;</span>
-        </div>
+    <>
+      <motion.header
+        className="fixed top-0 left-0 right-0 z-50 transition-all duration-300"
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, ease: 'easeOut' }}
+        style={{
+          background: scrolled ? glass.scrolled : glass.base,
+          backdropFilter: 'blur(28px) saturate(200%) brightness(110%)',
+          WebkitBackdropFilter: 'blur(28px) saturate(200%) brightness(110%)',
+          borderBottom: `1px solid ${scrolled ? glass.borderScroll : glass.border}`,
+          boxShadow: glass.shadow,
+          transition: 'all 0.4s ease',
+        }}
+      >
+        {/* Top shimmer line */}
+        <div style={{
+          position: 'absolute', top: 0, left: 0, right: 0, height: '1px',
+          background: isDark
+            ? 'linear-gradient(90deg, transparent, rgba(0,229,255,0.4), rgba(155,89,255,0.4), transparent)'
+            : 'linear-gradient(90deg, transparent, rgba(0,180,220,0.5), rgba(120,60,200,0.4), transparent)',
+          opacity: scrolled ? 1 : 0.5,
+          transition: 'opacity 0.3s',
+        }} />
 
-        {/* Desktop Links */}
-        <div className="hidden md:flex items-center gap-8">
-          {navLinks.map((link, i) => (
-            <motion.div
-              key={link.id}
-              initial={{ opacity: 0, y: -20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: i * 0.1 }}
-              className="relative"
-              whileHover="hovered"
-            >
-              <motion.button
-                onClick={(e) => handleNavClick(e, link.id)}
-                whileHover={{ y: -2 }}
-                whileTap={{ scale: 0.95 }}
-                transition={{ type: 'spring', stiffness: 400, damping: 17 }}
-                className={`font-mono text-sm tracking-widest uppercase transition-colors ${
-                  activeSection === link.id ? 'text-accent-cyan font-bold' : 'text-secondary hover:text-accent-cyan'
-                }`}
-              >
-                {link.name}
-              </motion.button>
+        <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between relative">
 
-              {/* Hover underline — slide in */}
-              {activeSection !== link.id && (
-                <motion.span
-                  className="absolute -bottom-1 left-0 h-[2px] bg-accent-cyan"
-                  initial={{ width: 0 }}
-                  variants={{ hovered: { width: '100%' } }}
-                  transition={{ duration: 0.2 }}
-                />
-              )}
-
-              {/* Active underline — persistent glow */}
-              {activeSection === link.id && (
-                <motion.div
-                  layoutId="underline"
-                  className="absolute -bottom-1 left-0 w-full h-[2px] bg-accent-cyan shadow-[0_0_8px_rgba(0,245,255,0.8)]"
-                />
-              )}
-            </motion.div>
-          ))}
-          
-          {/* Theme Toggle */}
-          <button 
-            onClick={toggleTheme}
-            className="p-2 text-accent-cyan hover:bg-accent-cyan/10 rounded-full transition-colors flex items-center justify-center w-10 h-10"
-            aria-label="Toggle Theme"
+          {/* ── LOGO ── */}
+          <motion.a
+            href="#"
+            onClick={e => { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+            className="flex items-center gap-1 font-orbitron font-bold text-xl md:text-2xl shrink-0"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
           >
-            {isDark ? '🌙' : '☀️'}
-          </button>
-        </div>
+            <span style={{ 
+              color: isDark ? 'rgba(148,163,184,0.5)' : 'rgba(100,116,139,0.6)', 
+              fontSize: '14px' 
+            }}>&lt;</span>
+            <span style={{ color: isDark ? '#ffffff' : '#0f172a' }}>Sadab</span>
+            <span style={{ 
+              color: isDark ? '#00e5ff' : '#0284c7',
+              textShadow: isDark ? '0 0 12px rgba(0,229,255,0.5)' : '0 0 12px rgba(2,132,199,0.3)',
+            }}>Manjar</span>
+            <span style={{ 
+              color: isDark ? 'rgba(148,163,184,0.5)' : 'rgba(100,116,139,0.6)', 
+              fontSize: '14px' 
+            }}>/&gt;</span>
+          </motion.a>
 
-        {/* Mobile Hamburger — large touch target */}
-        <button
-          className="md:hidden p-3 min-w-[44px] min-h-[44px] flex items-center justify-center text-accent-cyan"
-          onClick={() => setIsOpen(!isOpen)}
-          aria-label="Toggle menu"
-        >
-          <div className="w-6 h-5 flex flex-col justify-between items-end relative">
-            <motion.span 
-              animate={isOpen ? { rotate: 45, y: 8, width: '100%' } : { rotate: 0, y: 0, width: '100%' }}
-              className="h-[2px] bg-accent-cyan rounded-full origin-right"
-            />
-            <motion.span 
-              animate={isOpen ? { opacity: 0 } : { opacity: 1 }}
-              className="h-[2px] bg-accent-cyan rounded-full w-2/3"
-            />
-            <motion.span 
-              animate={isOpen ? { rotate: -45, y: -8, width: '100%' } : { rotate: 0, y: 0, width: '100%' }}
-              className="h-[2px] bg-accent-cyan rounded-full origin-right"
-            />
-          </div>
-        </button>
-      </div>
+          {/* ── DESKTOP LINKS ── */}
+          <div className="hidden md:flex items-center gap-4">
+            <nav className="flex items-center gap-1">
+              {navLinks.map(({ id, label }) => (
+                <motion.a
+                  key={id}
+                  href={`#${id}`}
+                  onClick={e => handleNavClick(e, id)}
+                  className="relative px-3 py-1.5 text-xs lg:text-sm font-mono rounded-lg uppercase font-medium tracking-widest whitespace-nowrap"
+                  animate={{
+                    color: activeSection === id
+                      ? (isDark ? '#00f5ff' : '#0284c7')
+                      : (isDark ? 'rgba(148,163,184,0.6)' : 'rgba(100,116,139,0.8)'),
+                  }}
+                  transition={{ 
+                    duration: 0.6, 
+                    ease: "easeInOut" 
+                  }}
+                  whileHover={{
+                    y: -1,
+                    color: isDark ? '#ffffff' : '#0f172a',
+                  }}
+                  whileTap={{ scale: 0.96 }}
+                >
+                  <span className="flex items-center gap-1.5 focus:outline-none relative z-10 transition-colors duration-500">
+                    <AnimatePresence mode="wait">
+                      {activeSection === id && (
+                        <motion.span 
+                          key="prefix"
+                          initial={{ opacity: 0, x: -8 }} 
+                          animate={{ opacity: 1, x: 0 }}
+                          exit={{ opacity: 0, x: -8 }}
+                          transition={{ duration: 0.3 }}
+                          className="text-[#bf00ff] font-bold"
+                        >
+                          &gt;
+                        </motion.span>
+                      )}
+                    </AnimatePresence>
+                    {label}
+                  </span>
+                  
+                  {activeSection === id && (
+                    <motion.div
+                      layoutId="activeUnderline"
+                      className="absolute -bottom-1 left-3 right-3 h-[2px] rounded-full z-0"
+                      style={{
+                        background: isDark
+                          ? 'linear-gradient(90deg, #00f5ff, #9b59ff)'
+                          : 'linear-gradient(90deg, #0284c7, #7c3aed)',
+                        boxShadow: isDark
+                          ? '0 0 12px rgba(0,245,255,0.6)'
+                          : '0 0 8px rgba(2,132,199,0.3)',
+                      }}
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ 
+                        type: 'spring', 
+                        stiffness: 250, 
+                        damping: 30 
+                      }}
+                    />
+                  )}
+                </motion.a>
+              ))}
+            </nav>
 
-      <AnimatePresence>
-        {isOpen && (
-          <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            className="fixed inset-0 top-[60px] bg-bg-card/95 backdrop-blur-md z-[999] flex flex-col items-center justify-center gap-8 md:hidden"
-          >
-            {navLinks.map((link, i) => (
-              <motion.button
-                key={link.id}
-                initial={{ x: -20, opacity: 0 }}
-                animate={{ x: 0, opacity: 1 }}
-                transition={{ delay: i * 0.05 }}
-                whileHover={{ x: 4 }}
-                whileTap={{ scale: 0.97 }}
-                onClick={(e) => handleNavClick(e, link.id)}
-                className={`text-left font-mono text-xl flex items-center gap-4 transition-colors ${
-                  activeSection === link.id ? 'text-accent-cyan font-bold' : 'text-secondary hover:text-accent-cyan'
-                }`}
-              >
-                <span className="text-accent-cyan/40 text-xs">0{i+1}_</span>
-                {link.name}
-              </motion.button>
-            ))}
-            {/* Theme toggle in mobile menu too */}
+            {/* Theme Toggle Desktop */}
             <button
               onClick={toggleTheme}
-              className="mt-4 p-3 text-accent-cyan border border-accent-cyan/20 rounded-full hover:bg-accent-cyan/10 transition-colors"
+              className="p-2 text-[#00f5ff] hover:bg-white/10 rounded-full transition-colors flex items-center justify-center w-10 h-10 border border-[#00f5ff]/30 sm:ml-2"
+              style={{
+                color: isDark ? '#00f5ff' : '#0284c7',
+                borderColor: isDark ? 'rgba(0,245,255,0.3)' : 'rgba(2,132,199,0.3)',
+              }}
               aria-label="Toggle Theme"
             >
-              {isDark ? '🌙' : '☀️'}
+              <motion.span
+                initial={false}
+                animate={{ rotate: isDark ? 0 : 360 }}
+                transition={{ duration: 0.5, ease: "backOut" }}
+              >
+                {isDark ? '🌙' : '☀️'}
+              </motion.span>
             </button>
+          </div>
+
+          {/* ── MOBILE HAMBURGER ── */}
+          <button
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+            className="md:hidden flex flex-col items-center justify-center gap-1.5 w-10 h-10"
+            aria-label="Toggle menu"
+          >
+            <motion.span
+              animate={isMenuOpen ? { rotate: 45, y: 6 } : { rotate: 0, y: 0 }}
+              className="block w-5 h-0.5 origin-center"
+              style={{ background: isDark ? '#00f5ff' : '#0284c7' }}
+              transition={{ duration: 0.25 }}
+            />
+            <motion.span
+              animate={isMenuOpen ? { opacity: 0, scaleX: 0 } : { opacity: 1, scaleX: 1 }}
+              className="block w-5 h-0.5"
+              style={{ background: isDark ? '#00f5ff' : '#0284c7' }}
+              transition={{ duration: 0.25 }}
+            />
+            <motion.span
+              animate={isMenuOpen ? { rotate: -45, y: -6 } : { rotate: 0, y: 0 }}
+              className="block w-5 h-0.5 origin-center"
+              style={{ background: isDark ? '#00f5ff' : '#0284c7' }}
+              transition={{ duration: 0.25 }}
+            />
+          </button>
+        </div>
+      </motion.header>
+
+      {/* ── MOBILE MENU ── */}
+      <AnimatePresence>
+        {isMenuOpen && (
+          <motion.div
+            className="fixed top-16 left-0 right-0 z-40 md:hidden overflow-hidden"
+            style={{
+              background: isDark ? 'rgba(5,5,8,0.92)' : 'rgba(255,255,255,0.85)',
+              backdropFilter: 'blur(28px) saturate(200%)',
+              WebkitBackdropFilter: 'blur(28px) saturate(200%)',
+              borderBottom: isDark ? '1px solid rgba(0,245,255,0.15)' : '1px solid rgba(2,132,199,0.2)',
+              boxShadow: isDark ? '0 8px 32px rgba(0,0,0,0.5)' : '0 8px 32px rgba(0,0,0,0.1)',
+            }}
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.3, ease: 'easeInOut' }}
+          >
+            <div className="max-w-7xl mx-auto px-6 py-4 flex flex-col gap-1">
+              {navLinks.map(({ id, label }, i) => (
+                <motion.a
+                  key={id}
+                  href={`#${id}`}
+                  onClick={e => handleNavClick(e, id)}
+                  className="flex items-center gap-4 px-4 py-3 rounded-xl font-mono font-medium text-sm transition-all uppercase tracking-widest"
+                  animate={{
+                    color: activeSection === id
+                      ? (isDark ? '#00f5ff' : '#0284c7')
+                      : (isDark ? 'rgba(148,163,184,0.8)' : 'rgba(51,65,85,0.8)'),
+                  }}
+                  transition={{ duration: 0.5 }}
+                  whileTap={{ scale: 0.98 }}
+                  whileHover={{
+                    color: isDark ? '#00f5ff' : '#0284c7',
+                  }}
+                >
+                  <span style={{ color: isDark ? 'rgba(0,245,255,0.4)' : 'rgba(2,132,199,0.4)', fontSize: '10px', minWidth: '20px' }}>
+                    0{i + 1}
+                  </span>
+                  {activeSection === id && (
+                    <span className="text-[#bf00ff] font-bold">&gt;</span>
+                  )}
+                  {label}
+                </motion.a>
+              ))}
+
+              {/* Theme toggle mobile menu */}
+              <div className="mt-3 pt-3 border-t border-white/5 flex justify-center">
+                <button
+                  onClick={toggleTheme}
+                  className="flex items-center justify-center gap-3 w-full py-3 rounded-xl font-mono text-sm transition-all border border-[#00f5ff]/20"
+                  style={{
+                    color: isDark ? '#00f5ff' : '#0284c7',
+                    borderColor: isDark ? 'rgba(0,245,255,0.3)' : 'rgba(2,132,199,0.3)',
+                  }}
+                >
+                  {isDark ? '🌙 Switch to Light' : '☀️ Switch to Dark'}
+                </button>
+              </div>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>
-    </motion.nav>
+
+      {/* SPACER */}
+      <div className="h-16" />
+    </>
   );
 };
 

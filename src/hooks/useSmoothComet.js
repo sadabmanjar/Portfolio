@@ -23,14 +23,14 @@ const useSmoothComet = (containerRef = null) => {
         'position:fixed;inset:0;width:100vw;height:100vh;pointer-events:none;z-index:9999;';
     } else {
       canvas.style.cssText =
-        'position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:2;';
+        'position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:9999;';
     }
     el.appendChild(canvas);
     const ctx = canvas.getContext('2d');
 
     let tx = 0, ty = 0, cx = 0, cy = 0;
     let active = false, globalAlpha = 0;
-    const pts = [], MAX = 55, SMOOTH = 0.20, FADE = 0.8;
+    const pts = [], MAX = 45, SMOOTH = 0.45, FADE = 0.8;
     let lx = 0, ly = 0;
     let rafId;
 
@@ -71,7 +71,7 @@ const useSmoothComet = (containerRef = null) => {
         globalAlpha = Math.max(0, globalAlpha - FADE * 1.5);
       }
 
-      pts.forEach((p) => { p.a = Math.max(0, p.a - (active ? 0.007 : FADE)); });
+      pts.forEach((p) => { p.a = Math.max(0, p.a - (active ? 0.015 : FADE)); });
       while (pts.length > MAX || (pts.length && pts[0].a <= 0)) pts.shift();
 
       ctx.clearRect(0, 0, canvas.width, canvas.height);

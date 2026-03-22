@@ -5,6 +5,7 @@ import { portfolioData } from '../data/portfolio';
 import CyberButton from './ui/CyberButton';
 
 const Hero = () => {
+
   const { personal } = portfolioData;
   const typewriterText = useTypewriter([
     "Full Stack Developer",
