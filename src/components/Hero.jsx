@@ -3,13 +3,14 @@ import { motion } from 'framer-motion';
 import { useTypewriter } from '../hooks/useTypewriter';
 import { portfolioData } from '../data/portfolio';
 import CyberButton from './ui/CyberButton';
+import Hero3DObject from './ui/Hero3DObject';
 
 const Hero = () => {
 
   const { personal } = portfolioData;
   const typewriterText = useTypewriter([
     "Full Stack Developer",
-    "Software Engineer Intern",
+    "Software Engineer",
     "API Tester & QA Engineer",
     "Cybersecurity Enthusiast"
   ]);
@@ -34,6 +35,10 @@ const Hero = () => {
         style={{ x: mousePos.x, y: mousePos.y }}
         className="absolute inset-0 dot-grid opacity-30 z-0"
       />
+      
+      {/* 3D Interactive Object */}
+      <Hero3DObject />
+      
       
       {/* Ambient Glows */}
       <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-accent-cyan/10 blur-[120px] rounded-full" />
