@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { useTypewriter } from '../hooks/useTypewriter';
 import { portfolioData } from '../data/portfolio';
 import CyberButton from './ui/CyberButton';
+// import Jarvis3DGlobe from './ui/Jarvis3DGlobe';
 
 const Hero = () => {
 
@@ -34,6 +35,10 @@ const Hero = () => {
         style={{ x: mousePos.x, y: mousePos.y }}
         className="absolute inset-0 dot-grid opacity-30 z-0"
       />
+
+      {/* J.A.R.V.I.S. 3D Globe (Commented out for future use) */}
+      {/* <Jarvis3DGlobe /> */}
+
       
       {/* Ambient Glows */}
       <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-accent-cyan/10 blur-[120px] rounded-full" />
