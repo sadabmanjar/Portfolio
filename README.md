@@ -161,7 +161,7 @@ colors: {
 | **Skills**         | Tech stack chips grouped by category                       |
 | **Projects**       | MoveCare, Campus Navigation, Entrepreneurship Club Website |
 | **Experience**     | Software Engineer Intern, Cisco Cybersecurity Analyst      |
-| **Education**      | B.Tech Engineering — 1st Year                              |
+| **Education**      | B.Tech Computer Science Engineering — 3rd Year             |
 | **Certifications** | Internship & Cisco certifications                          |
 | **Contact**        | Form + GitHub, LinkedIn, Email links                       |
 
