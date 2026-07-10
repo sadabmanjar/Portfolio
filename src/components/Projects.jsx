@@ -1,5 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import { Link } from 'react-router-dom';
 import { portfolioData } from '../data/portfolio';
 import TiltCard from './ui/TiltCard';
 
@@ -65,37 +66,26 @@ const ProjectCard = ({ project }) => {
             href={project.github}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-1 text-sm text-secondary hover:text-primary font-mono"
-            whileHover={{ x: 3 }}
+            className="flex-1 flex items-center justify-center gap-2 py-2 px-4 rounded bg-white/5 hover:bg-white/10 border border-white/10 transition-colors"
+            whileHover={{ y: -2 }}
             whileTap={{ scale: 0.95 }}
           >
-            GitHub
-            <motion.span
-              className="inline-block text-[10px]"
-              animate={{ x: [0, 3, 0] }}
-              transition={{ repeat: Infinity, duration: 1.5 }}
-            >
-              ↗
-            </motion.span>
+            <span className="text-sm font-mono text-secondary group-hover:text-primary transition-colors">
+              GitHub
+            </span>
           </motion.a>
-
-          <motion.a
-            href={project.demo}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center gap-1 text-sm text-accent-cyan font-mono"
-            whileHover={{ x: 3, textShadow: '0 0 8px rgba(0,229,255,0.8)' }}
-            whileTap={{ scale: 0.95 }}
-          >
-            Live Demo
-            <motion.span
-              className="inline-block text-[10px]"
-              animate={{ x: [0, 3, 0] }}
-              transition={{ repeat: Infinity, duration: 1.2 }}
+          <Link to={`/projects/${project.id}`} className="flex-1">
+            <motion.div
+              className="w-full flex items-center justify-center gap-2 py-2 px-4 rounded bg-accent-cyan/10 hover:bg-accent-cyan/20 border border-accent-cyan/30 transition-colors relative overflow-hidden group/btn"
+              whileHover={{ y: -2 }}
+              whileTap={{ scale: 0.95 }}
             >
-              ↗
-            </motion.span>
-          </motion.a>
+              <div className="absolute inset-0 w-0 bg-accent-cyan/20 transition-all duration-300 group-hover/btn:w-full" />
+              <span className="text-sm font-mono text-accent-cyan relative z-10">
+                Case Study
+              </span>
+            </motion.div>
+          </Link>
         </div>
       </motion.div>
     </TiltCard>

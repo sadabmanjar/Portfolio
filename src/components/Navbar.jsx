@@ -1,25 +1,26 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTheme } from '../context/ThemeContext';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 const navLinks = [
-  { id: 'hero',       label: 'Home'       },
-  { id: 'about',      label: 'About'      },
-  { id: 'skills',     label: 'Skills'     },
-  { id: 'projects',   label: 'Projects'   },
-  { id: 'experience', label: 'Experience' },
-  { id: 'contact',    label: 'Contact'    },
+  // { id: 'home',       label: 'Home',      path: '/' },
+  { id: 'about',      label: 'About',     path: '/#about' },
+  { id: 'projects',   label: 'Projects',  path: '/#projects' },
+  { id: 'skills',     label: 'Skills',    path: '/#skills' },
+  { id: 'experience', label: 'Experience',path: '/#experience' },
+  { id: 'contact',    label: 'Contact',   path: '/#contact' },
+  { id: 'blog',       label: 'Blog',      path: '/blog' },
 ];
 
 const Navbar = () => {
   const { toggleTheme } = useTheme();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [activeSection, setActiveSection] = useState('hero');
+  const [activeSection, setActiveSection] = useState('home');
   const [scrolled, setScrolled] = useState(false);
   
-  // To ignore intersection observer during smooth scrolling
-  const scrollLocked = useRef(false);
-  const scrollTimeout = useRef(null);
+  const location = useLocation();
+  const navigate = useNavigate();
 
   // Theme detection state
   const [isDark, setIsDark] = useState(
@@ -36,10 +37,6 @@ const Navbar = () => {
     // Initial scroll check
     const handleScroll = () => {
       setScrolled(window.scrollY > 40);
-      // Forced Home check
-      if (window.scrollY < 120 && !scrollLocked.current) {
-        setActiveSection('hero');
-      }
     };
     window.addEventListener('scroll', handleScroll);
     
@@ -49,52 +46,52 @@ const Navbar = () => {
     };
   }, []);
 
+  // Update active section based on route
   useEffect(() => {
-    const observers = navLinks.map(({ id }) => {
-      const el = document.getElementById(id);
-      if (!el) return null;
-      const obs = new IntersectionObserver(
-        (entries) => { 
-          entries.forEach(e => {
-            if (e.isIntersecting && !scrollLocked.current) {
-              setActiveSection(id);
-            }
-          });
-        },
-        // Threshold: High enough to avoid accidental flickers
-        { threshold: 0.25, rootMargin: '-10% 0px -40% 0px' }
-      );
-      obs.observe(el);
-      return obs;
-    });
-    return () => observers.forEach(o => o?.disconnect());
-  }, []);
-
-  const handleNavClick = (e, id) => {
-    e.preventDefault();
-    scrollLocked.current = true;
-    setActiveSection(id);
-    
-    if (scrollTimeout.current) clearTimeout(scrollTimeout.current);
-    
-    const element = document.getElementById(id);
-    if(element) {
-      const headerOffset = 0;
-      const elementPosition = element.getBoundingClientRect().top;
-      const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
-
-      window.scrollTo({
-        top: offsetPosition,
-        behavior: 'smooth'
-      });
+    if (location.pathname === '/') {
+      if (location.hash === '#about') setActiveSection('about');
+      else if (location.hash === '#projects') setActiveSection('projects');
+      else setActiveSection('home');
+    } else {
+      const activePath = location.pathname.replace('/', '');
+      setActiveSection(activePath);
     }
+  }, [location]);
 
+  // Handle cross-page hash navigation
+  useEffect(() => {
+    if (location.pathname === '/' && location.hash) {
+      setTimeout(() => {
+        const id = location.hash.replace('#', '');
+        const element = document.getElementById(id);
+        if (element) {
+          const offsetPosition = element.getBoundingClientRect().top + window.pageYOffset;
+          window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
+        }
+      }, 500); // Wait for page transition
+    }
+  }, [location.pathname, location.hash]);
+
+  const handleNavClick = (e, id, path) => {
+    e.preventDefault();
     setIsMenuOpen(false);
-
-    // Increase lock time so it doesn't snap back while scrolling far
-    scrollTimeout.current = setTimeout(() => {
-      scrollLocked.current = false;
-    }, 1200);
+    
+    if (path.startsWith('/#')) {
+      if (location.pathname !== '/') {
+        navigate(path);
+      } else {
+        const sectionId = path.replace('/#', '');
+        const element = document.getElementById(sectionId);
+        if(element) {
+          const offsetPosition = element.getBoundingClientRect().top + window.pageYOffset;
+          window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
+          navigate(path, { replace: true });
+        }
+      }
+    } else {
+      navigate(path);
+      window.scrollTo(0, 0);
+    }
   };
 
   // Dark mode glass values
@@ -147,8 +144,8 @@ const Navbar = () => {
 
           {/* ── LOGO ── */}
           <motion.a
-            href="#"
-            onClick={e => { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+            href="/"
+            onClick={e => handleNavClick(e, 'home', '/')}
             className="flex items-center gap-1 font-orbitron font-bold text-xl md:text-2xl shrink-0"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
@@ -171,11 +168,11 @@ const Navbar = () => {
           {/* ── DESKTOP LINKS ── */}
           <div className="hidden md:flex items-center gap-4">
             <nav className="flex items-center gap-1">
-              {navLinks.map(({ id, label }) => (
+              {navLinks.map(({ id, label, path }) => (
                 <motion.a
                   key={id}
-                  href={`#${id}`}
-                  onClick={e => handleNavClick(e, id)}
+                  href={path}
+                  onClick={e => handleNavClick(e, id, path)}
                   className="relative px-3 py-1.5 text-xs lg:text-sm font-mono rounded-lg uppercase font-medium tracking-widest whitespace-nowrap"
                   animate={{
                     color: activeSection === id
@@ -301,11 +298,11 @@ const Navbar = () => {
             transition={{ duration: 0.3, ease: 'easeInOut' }}
           >
             <div className="max-w-7xl mx-auto px-6 py-4 flex flex-col gap-1">
-              {navLinks.map(({ id, label }, i) => (
+              {navLinks.map(({ id, label, path }, i) => (
                 <motion.a
                   key={id}
-                  href={`#${id}`}
-                  onClick={e => handleNavClick(e, id)}
+                  href={path}
+                  onClick={e => handleNavClick(e, id, path)}
                   className="flex items-center gap-4 px-4 py-3 rounded-xl font-mono font-medium text-sm transition-all uppercase tracking-widest"
                   animate={{
                     color: activeSection === id
