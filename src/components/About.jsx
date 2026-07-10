@@ -27,9 +27,9 @@ const About = () => {
   const { personal } = portfolioData;
 
   return (
-    <section id="about" className="min-height-screen bg-bg-main px-6 md:px-16 py-24 overflow-hidden">
+    <section id="about" className="min-h-screen bg-bg-main px-6 md:px-16 py-32 overflow-hidden">
       <div className="max-w-7xl mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
           
           {/* Left Column - Avatar */}
           <motion.div 
@@ -39,7 +39,7 @@ const About = () => {
             transition={{ duration: 0.8 }}
             className="relative justify-self-center md:justify-self-start"
           >
-            <div className="relative w-48 h-48 sm:w-64 sm:h-64 md:w-72 md:h-72 border-2 border-accent-cyan/50 bg-bg-card rounded-lg flex items-center justify-center overflow-hidden">
+            <div className="relative w-64 h-64 md:w-80 md:h-80 border border-white/10 bg-bg-card/40 backdrop-blur-md rounded-2xl flex items-center justify-center overflow-hidden">
               {/* Scanline Effect */}
               <div className="absolute inset-0 pointer-events-none z-10 opacity-20" 
                    style={{ 
@@ -51,18 +51,12 @@ const About = () => {
               <img
                 src="/sadab.jpeg"
                 alt="Md Sadab Manjar"
-                className="absolute inset-0 w-full h-full object-cover object-top z-0"
+                className="absolute inset-0 w-full h-full object-cover object-top z-0 opacity-90"
               />
-
-              {/* Decorative Corner Brackets */}
-              <div className="absolute top-2 left-2 w-4 h-4 border-t-2 border-l-2 border-accent-cyan"></div>
-              <div className="absolute top-2 right-2 w-4 h-4 border-t-2 border-r-2 border-accent-cyan"></div>
-              <div className="absolute bottom-2 left-2 w-4 h-4 border-b-2 border-l-2 border-accent-cyan"></div>
-              <div className="absolute bottom-2 right-2 w-4 h-4 border-b-2 border-r-2 border-accent-cyan"></div>
             </div>
             
             {/* Glow Effect Background */}
-            <div className="absolute -inset-4 bg-accent-cyan/5 blur-2xl -z-10 rounded-full"></div>
+            <div className="absolute -inset-10 bg-accent-cyan/10 blur-[80px] -z-10 rounded-full"></div>
           </motion.div>
 
           {/* Right Column - Bio */}
@@ -71,16 +65,16 @@ const About = () => {
             whileInView={{ x: 0, opacity: 1 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
-            className="space-y-6"
+            className="space-y-8"
           >
             <div>
-              <p className="text-accent-cyan font-mono text-sm mb-2 tracking-widest">// ABOUT ME</p>
-              <h2 className="font-orbitron text-3xl md:text-4xl text-primary mb-4">
+              <p className="text-accent-cyan font-mono text-xs tracking-[0.3em] mb-4 uppercase">// About Me</p>
+              <h2 className="font-orbitron text-4xl md:text-5xl text-primary mb-4 leading-tight">
                 Building Scalable Digital Systems
               </h2>
             </div>
             
-            <p className="text-secondary leading-relaxed font-mono text-sm md:text-base">
+            <p className="text-secondary/80 leading-loose font-mono text-sm md:text-base">
               I'm a 3rd-year B.Tech Engineering student and a Software Engineer Intern 
               with hands-on experience in full-stack development, API testing, and 
               cybersecurity fundamentals. I've built real-world platforms like MoveCare 
@@ -88,8 +82,8 @@ const About = () => {
               by a passion for scalable, impactful technology that solves real problems.
             </p>
 
-            <div className="pt-4">
-               <a href={personal.resumeUrl} target="_blank" rel="noopener noreferrer" className="inline-block border border-accent-cyan px-6 py-2 text-accent-cyan font-orbitron text-sm hover:bg-accent-cyan hover:text-black transition-all duration-300 shadow-neon-cyan/20 shadow-lg">
+            <div className="pt-6">
+               <a href={personal.resumeUrl} target="_blank" rel="noopener noreferrer" className="inline-block border border-accent-cyan/50 px-8 py-3 text-accent-cyan font-orbitron text-sm hover:bg-accent-cyan hover:text-black transition-all duration-300 shadow-[0_0_15px_rgba(0,245,255,0.15)] hover:shadow-[0_0_25px_rgba(0,245,255,0.4)] backdrop-blur-md bg-accent-cyan/5">
                  RESUME
                </a>
             </div>
