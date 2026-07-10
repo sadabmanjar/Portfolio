@@ -18,6 +18,7 @@ const Projects = lazy(() => import('./components/Projects'));
 const Experience = lazy(() => import('./components/Experience'));
 const Education = lazy(() => import('./components/Education'));
 const Certifications = lazy(() => import('./components/Certifications'));
+const Achievements = lazy(() => import('./components/Achievements'));
 const Contact = lazy(() => import('./components/Contact'));
 const Footer = lazy(() => import('./components/Footer'));
 
@@ -98,6 +99,7 @@ const App = () => {
                 <Experience />
                 <Education />
                 <Certifications />
+                <Achievements />
                 <Contact />
                 <Footer />
               </Suspense>
@@ -128,26 +130,3 @@ const App = () => {
 
 export default App;
 
-/**
- * FINAL PROJECT MODULE CHECKLIST:
- * 1. tailwind.config.js - Theme extensions & neon utilities
- * 2. src/index.css - Global styles, fonts, scrollbar, animations, theme overrides
- * 3. src/data/portfolio.js - Main project data store
- * 4. src/context/ThemeContext.jsx - Light/Dark mode state management
- * 5. src/hooks/useCountUp.js - Stat animation logic
- * 6. src/hooks/useTypewriter.js - Hero cycling text logic
- * 7. src/hooks/useScrollProgress.js - Navigation progress bar logic
- * 8. src/components/Preloader.jsx - Premium initial loading screen
- * 9. src/components/Cursor.jsx - Custom lagging mouse interactor
- * 10. src/components/Navbar.jsx - Responsive navigation with theme toggle
- * 11. src/components/Hero.jsx - Landing with glitch & parallax
- * 12. src/components/About.jsx - Bio with scanline avatar & stats
- * 13. src/components/Skills.jsx - Tech stack grid
- * 14. src/components/Projects.jsx - Interactive project showcase
- * 15. src/components/Experience.jsx - Vertical work timeline
- * 16. src/components/Education.jsx - Academic profile card
- * 17. src/components/Certifications.jsx - Staggered cert grid
- * 18. src/components/Contact.jsx - Interactive contact form
- * 19. src/components/Footer.jsx - Minimal signature section
- * 20. src/App.jsx - Main entry, lazy loading, & layout assembly
- */

@@ -4,6 +4,55 @@ import emailjs from '@emailjs/browser';
 import { portfolioData } from '../data/portfolio';
 import Toast from './ui/Toast';
 
+/* 
+const PaperPlane = () => (
+  <motion.div
+    initial={{ x: 0, y: 0, rotate: -45, opacity: 0, scale: 0.5 }}
+    animate={{ 
+      x: [0, -100, -350, -750, -1200], 
+      y: [0, 80, -40, -450, -1000],
+      rotate: [-45, 15, -10, -30, -45],
+      opacity: [0, 1, 1, 1, 0],
+      scale: [0.5, 1, 1.3, 1.8, 2.5]
+    }}
+    transition={{ 
+      duration: 3, 
+      ease: [0.12, 0, 0.39, 0], // Smooth acceleration
+      times: [0, 0.2, 0.45, 0.75, 1] 
+    }}
+    className="absolute pointer-events-none z-50 text-accent-cyan"
+    style={{ left: '50%', top: '0%' }}
+  >
+    <svg 
+      width="40" 
+      height="40" 
+      viewBox="0 0 24 24" 
+      fill="none" 
+      stroke="currentColor" 
+      strokeWidth="1.5" 
+      strokeLinecap="round" 
+      strokeLinejoin="round"
+      className="drop-shadow-[0_0_15px_rgba(0,245,255,1)]"
+    >
+      <path d="M22 2L11 13" />
+      <path d="M22 2L15 22L11 13L2 9L22 2Z" />
+    </svg>
+    <div className="absolute top-1/2 left-full pointer-events-none origin-left">
+      {[...Array(2)].map((_, i) => (
+        <motion.div 
+          key={i}
+          initial={{ scaleX: 0, opacity: 0 }}
+          animate={{ scaleX: [0, 5, 0], opacity: [0, 0.8, 0] }}
+          transition={{ duration: 1.5, repeat: Infinity, delay: i * 0.4 }}
+          className="h-[1.5px] w-48 bg-accent-cyan/60 blur-[1px] mb-2"
+          style={{ transform: `rotate(${180 + (i - 0.5) * 8}deg)` }}
+        />
+      ))}
+    </div>
+  </motion.div>
+);
+*/
+
 const handleRipple = (e) => {
   const btn = e.currentTarget;
   const circle = document.createElement('span');
@@ -29,6 +78,7 @@ const Contact = () => {
   const [status, setStatus] = useState('idle'); // idle, loading, success, error
   const [errors, setErrors] = useState({});
   const [toast, setToast] = useState({ isVisible: false, message: '', type: 'success' });
+  const [showPlane, setShowPlane] = useState(false);
 
   // --- EmailJS credentials from .env ---
   const EMAILJS_SERVICE_ID = import.meta.env.VITE_EMAILJS_SERVICE_ID;
@@ -69,6 +119,18 @@ const Contact = () => {
     setErrors({});
     setStatus('loading');
 
+    // Simulate success if keys are missing (for local dev without .env)
+    if (!EMAILJS_SERVICE_ID || EMAILJS_SERVICE_ID === "YOUR_SERVICE_ID") {
+       setTimeout(() => {
+          setStatus('success');
+          // setShowPlane(true);
+          // setToast({ isVisible: true, message: 'Message sent successfully (Simulation)! 🚀', type: 'success' });
+          formRef.current.reset();
+          setTimeout(() => { setStatus('idle'); /* setShowPlane(false); */ }, 5000);
+       }, 1500);
+       return;
+    }
+
     emailjs.sendForm(
       EMAILJS_SERVICE_ID,
       EMAILJS_TEMPLATE_ID,
@@ -77,9 +139,10 @@ const Contact = () => {
     )
     .then((result) => {
         setStatus('success');
-        setToast({ isVisible: true, message: 'Message sent successfully! 🚀', type: 'success' });
+        // setShowPlane(true);
+        // setToast({ isVisible: true, message: 'Message sent successfully! 🚀', type: 'success' });
         formRef.current.reset();
-        setTimeout(() => setStatus('idle'), 3000);
+        setTimeout(() => { setStatus('idle'); /* setShowPlane(false); */ }, 5000);
     }, (error) => {
         setStatus('error');
         setToast({ isVisible: true, message: 'Failed to send message. Please try again later. ❌', type: 'error' });
@@ -108,7 +171,7 @@ const Contact = () => {
   };
 
   return (
-    <section id="contact" className="bg-bg-main py-24 px-6 md:px-16">
+    <section id="contact" className="bg-bg-main py-24 px-6 md:px-16 overflow-hidden relative">
       <div className="max-w-7xl mx-auto">
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
@@ -157,6 +220,7 @@ const Contact = () => {
             initial={{ y: 40, opacity: 0 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
+            className="relative"
           >
             <form ref={formRef} onSubmit={handleSubmit} className="space-y-6">
               <motion.div initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}>
@@ -189,54 +253,110 @@ const Contact = () => {
                 {errors.message && <p className="text-red-500 text-[10px] mt-1 ml-1 font-mono uppercase tracking-wider">{errors.message}</p>}
               </motion.div>
 
-              <motion.button
-                type="submit"
-                className="cyber-btn relative overflow-hidden w-full bg-accent-cyan text-black font-bold py-3 rounded-lg font-mono"
-                whileHover={{
-                  scale: 1.02,
-                  boxShadow: '0 0 25px rgba(0,229,255,0.6), 0 0 50px rgba(0,229,255,0.2)'
-                }}
-                whileTap={{ scale: 0.98 }}
-                onClick={handleRipple}
-                disabled={status === 'loading'}
-              >
-                <AnimatePresence mode="wait">
-                  {status === 'idle' && (
-                    <motion.span key="idle"
-                      initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-                      className="flex items-center justify-center gap-2"
-                    >
-                      Send Message
-                      <motion.span animate={{ x: [0, 4, 0] }} transition={{ repeat: Infinity, duration: 1.5 }}>→</motion.span>
-                    </motion.span>
-                  )}
-                  {status === 'loading' && (
-                    <motion.span key="loading"
-                      initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-                      className="flex items-center justify-center gap-2"
-                    >
-                      <motion.span animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 1, ease: 'linear' }}>⟳</motion.span>
-                      Sending...
-                    </motion.span>
-                  )}
-                  {status === 'success' && (
-                    <motion.span key="success"
-                      initial={{ scale: 0.8, opacity: 0 }} animate={{ scale: 1, opacity: 1 }}
-                      className="flex items-center justify-center gap-2 text-green-400"
-                    >
-                      ✓ Message Sent!
-                    </motion.span>
-                  )}
-                   {status === 'error' && (
-                    <motion.span key="error"
-                      initial={{ scale: 0.8, opacity: 0 }} animate={{ scale: 1, opacity: 1 }}
-                      className="flex items-center justify-center gap-2 text-red-400"
-                    >
-                      ⚠ Try Again
-                    </motion.span>
-                  )}
-                </AnimatePresence>
-              </motion.button>
+              <div className="relative">
+                <motion.button
+                  type="submit"
+                  className="relative overflow-hidden w-full py-3.5 rounded-xl font-mono font-bold text-sm z-10"
+                  animate={{
+                    backgroundColor: status === 'success' ? 'rgba(0, 245, 255, 0)' : '#00f5ff',
+                    color: status === 'success' ? '#00f5ff' : '#000000',
+                    border: status === 'success' ? '1px solid rgba(0, 245, 255, 0.3)' : '1px solid transparent'
+                  }}
+                  whileHover={{ scale: 1.02, boxShadow: status === 'success' ? 'none' : '0 0 30px rgba(0,229,255,0.5)' }}
+                  whileTap={{ scale: 0.97 }}
+                  onClick={handleRipple}
+                  disabled={status === 'loading'}
+                >
+                  <AnimatePresence mode="wait">
+                    {status === 'idle' && (
+                      <motion.span key="idle"
+                        initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+                        className="flex items-center justify-center gap-2"
+                      >
+                        Send Message
+                        <motion.span 
+                          animate={{ x: [0, 5, 0] }}
+                          transition={{ repeat: Infinity, duration: 0.8, ease: 'easeInOut' }}
+                        >
+                          →
+                        </motion.span>
+                      </motion.span>
+                    )}
+                    {status === 'loading' && (
+                      <motion.span key="loading"
+                        initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+                        className="flex items-center justify-center gap-2"
+                      >
+                        <motion.span animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 1, ease: 'linear' }}>⟳</motion.span>
+                        Sending...
+                      </motion.span>
+                    )}
+                    {status === 'success' && (
+                      <motion.div key="success"
+                        initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+                        className="relative w-full flex items-center justify-center h-full min-h-[1.5rem]"
+                      >
+                         {/* Phase 1: Slow Paper Plane Flight (One-time) */}
+                         <motion.div
+                           initial={{ x: -150, opacity: 1 }}
+                           animate={{ x: 250, opacity: [0, 1, 1, 0] }}
+                           transition={{ duration: 2.8, ease: "easeInOut" }}
+                           className="absolute flex items-center"
+                         >
+                            <div className="relative">
+                               <svg 
+                                width="20" 
+                                height="20" 
+                                viewBox="0 0 24 24" 
+                                fill="none" 
+                                stroke="currentColor" 
+                                strokeWidth="2" 
+                                strokeLinecap="round" 
+                                strokeLinejoin="round"
+                                className="rotate-45" /* Point Head Directly Right */
+                              >
+                                <path d="M22 2L11 13" />
+                                <path d="M22 2L15 22L11 13L2 9L22 2Z" />
+                              </svg>
+                              {/* Enahanced Multiple Trails */}
+                              {[-1, 0, 1].map((offset, i) => (
+                                <motion.div 
+                                  key={i}
+                                  initial={{ scaleX: 0, opacity: 0 }}
+                                  animate={{ scaleX: [0, 1, 0], opacity: [0, 0.8, 0] }}
+                                  transition={{ duration: 0.8, delay: i * 0.15, repeat: Infinity, ease: "linear" }}
+                                  className="absolute top-1/2 right-full h-0 w-20 border-b-[2px] border-[#00f5ff] border-dotted origin-right"
+                                  style={{ 
+                                    transform: `translateY(${offset * 3 - 0.5}px) rotate(${offset * -2}deg)`,
+                                    filter: 'blur(0.5px)'
+                                  }}
+                                />
+                              ))}
+                            </div>
+                         </motion.div>
+
+                         {/* Phase 2: Message Sent Text (Delayed until plane passes) */}
+                         <motion.div
+                           initial={{ opacity: 0, scale: 0.9 }}
+                           animate={{ opacity: 1, scale: 1 }}
+                           transition={{ delay: 2.8, duration: 0.4 }}
+                           className="flex items-center gap-2 text-cyber-cyan font-bold uppercase tracking-widest text-[10px]"
+                         >
+                           ✓ Message Sent
+                         </motion.div>
+                      </motion.div>
+                    )}
+                     {status === 'error' && (
+                      <motion.span key="error"
+                        initial={{ scale: 0.8, opacity: 0 }} animate={{ scale: 1, opacity: 1 }}
+                        className="flex items-center justify-center gap-2 text-red-600"
+                      >
+                        ⚠ Try Again
+                      </motion.span>
+                    )}
+                  </AnimatePresence>
+                </motion.button>
+              </div>
             </form>
           </motion.div>
         </div>

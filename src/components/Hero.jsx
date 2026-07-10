@@ -4,13 +4,14 @@ import { useTypewriter } from '../hooks/useTypewriter';
 import { portfolioData } from '../data/portfolio';
 import CyberButton from './ui/CyberButton';
 // import Jarvis3DGlobe from './ui/Jarvis3DGlobe';
+import Hero3DObject from './ui/Hero3DObject';
 
 const Hero = () => {
 
   const { personal } = portfolioData;
   const typewriterText = useTypewriter([
     "Full Stack Developer",
-    "Software Engineer Intern",
+    "Software Engineer",
     "API Tester & QA Engineer",
     "Cybersecurity Enthusiast"
   ]);
@@ -39,6 +40,10 @@ const Hero = () => {
       {/* J.A.R.V.I.S. 3D Globe (Commented out for future use) */}
       {/* <Jarvis3DGlobe /> */}
 
+      
+      {/* 3D Interactive Object */}
+      <Hero3DObject />
+      
       
       {/* Ambient Glows */}
       <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-accent-cyan/10 blur-[120px] rounded-full" />

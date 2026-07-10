@@ -2,7 +2,7 @@ export const portfolioData = {
   personal: {
     name: "Md Sadab Manjar",
     initials: "SM",
-    role: "Software Engineer Intern | Full Stack Developer",
+    role: "Software Engineer",
     tagline: "Building scalable digital systems that solve real-world problems.",
     email: "mdsadabmanjar786@gmail.com",
     github: "https://github.com/sadabmanjar",
@@ -11,27 +11,31 @@ export const portfolioData = {
     resumeUrl: "/resume.pdf",
   },
   skills: [
-    { category: "Frontend", items: [
-      { name: "HTML", icon: "🌐" },
-      { name: "CSS", icon: "🎨" },
+    { category: "Languages", items: [
       { name: "JavaScript", icon: "⚡" },
+      { name: "TypeScript", icon: "📘" },
+      { name: "C++", icon: "⚙️" },
+    ]},
+    { category: "Frontend & Mobile", items: [
       { name: "React", icon: "⚛️" },
       { name: "Angular", icon: "🔺" },
+      { name: "Ionic", icon: "📱" },
+      { name: "Capacitor", icon: "⚡" },
       { name: "Tailwind CSS", icon: "💨" },
+      { name: "HTML/CSS", icon: "🎨" },
     ]},
-    { category: "Backend", items: [
+    { category: "Backend & Database", items: [
       { name: "Node.js", icon: "🟢" },
       { name: "Express.js", icon: "🚂" },
-    ]},
-    { category: "Database", items: [
+      { name: "REST APIs", icon: "🔗" },
       { name: "MongoDB", icon: "🍃" },
       { name: "MySQL", icon: "🐬" },
     ]},
-    { category: "Tools & Platforms", items: [
-      { name: "Git", icon: "🔧" },
-      { name: "GitHub", icon: "🐙" },
+    { category: "Tools & Concepts", items: [
+      { name: "Git & GitHub", icon: "🐙" },
       { name: "Postman", icon: "📮" },
-      { name: "Vercel", icon: "▲" },
+      { name: "BLE/IoT", icon: "📡" },
+      { name: "Apps Script", icon: "📜" },
     ]},
   ],
   projects: [
@@ -39,17 +43,27 @@ export const portfolioData = {
       id: 2,
       featured: true,
       title: "Campus Navigation System",
-      image: "https://placehold.co/800x450/0d0d18/00e5ff?text=Campus+Navigation+System&font=mono",
-      description: "Interactive campus navigation platform with admin access control and multi-campus scalability planning, helping students and visitors navigate complex campus environments.",
+      image: "/projects/campus-nav.jpg",
+      description: "Interactive campus navigation platform to help students and visitors discover routes. Built with a full-stack architecture, React frontend, and integrated authentication.",
       tags: ["React", "Node.js", "MongoDB", "Leaflet.js"],
       github: "https://github.com/sadabmanjar/NAV-RNTU",
       demo: "https://nav-rntu.vercel.app/"
     },
     {
+      id: 4,
+      featured: true,
+      title: "Faculty Professional Dashboard",
+      image: "/projects/faculty-dashboard.png",
+      description: "Interactive dashboard designed for faculty development. Features modules for FDP planning, achievement tracking, and professional career progression.",
+      tags: ["React", "Vercel", "Tailwind CSS"],
+      github: "https://github.com/sadabmanjar",
+      demo: "https://rntu-fdp-100.vercel.app/"
+    },
+    {
       id: 1,
       featured: true,
       title: "MoveCare",
-      image: "https://placehold.co/800x450/0d0d18/00e5ff?text=MoveCare&font=mono",
+      image: "/projects/movecare.png",
       description: "A healthcare platform enabling video consultation and remote physiotherapy sessions, connecting patients with certified professionals for quality care from home.",
       tags: ["React", "Node.js", "MongoDB"],
       github: "https://github.com/sadabmanjar",
@@ -59,7 +73,7 @@ export const portfolioData = {
       id: 3,
       featured: false,
       title: "Entrepreneurship Club Website",
-      image: "https://placehold.co/800x450/0d0d18/00e5ff?text=Entrepreneurship+Club+Website&font=mono",
+      image: "/projects/ecell.png",
       description: "Professional club platform featuring events showcase, team profiles, membership system, and announcements — serving the campus entrepreneurship community.",
       tags: ["React", "Node.js", "MongoDB", "Tailwind CSS"],
       github: "https://github.com/sadabmanjar",
@@ -68,51 +82,39 @@ export const portfolioData = {
   ],
   experience: [
     {
-      company: "Software Company",
+      company: "RemotePhysios",
       role: "Software Engineer Intern",
-      duration: "Recent",
+      duration: "02/2026 - Present",
       bullets: [
         "Worked on API testing and validation for production-level endpoints",
         "Performed admin panel API integration testing and verified data flows",
-        "Reported bugs systematically and handled retesting after developer fixes",
-        "Contributed to API documentation support and maintained structured bug reports",
-        "Identified and resolved frontend UI issues to improve user experience",
-        "Tested newly developed APIs and updated structured bug report workflows",
+        "Developed healthcare web and mobile applications using Angular, Ionic, and Capacitor.",
+        "Converted a healthcare web platform into Android and iOS mobile applications.",
+        "Integrated BLE-based medical devices (SPO2 and TENS) and designed device control workflows.",
+        "Built API documentation and bug-tracking dashboards using Google Apps Script.",
+        "Performed API testing, bug analysis, feature development, and technical documentation.",
+        "Generated Android/iOS mobile application builds and produced production-ready APK/AAB packages."
       ]
-    },
-    {
-      company: "Cisco",
-      role: "Junior Cybersecurity Analyst",
-      duration: "Recent",
-      bullets: [
-        "Worked on cybersecurity fundamentals, network defense concepts, and endpoint security",
-        "Performed threat analysis and basic security monitoring activities",
-        "Gained hands-on exposure to security practices and risk awareness methodologies",
-        "Studied network protection concepts through Cisco learning and practical modules",
-      ]
-    },
+    }
   ],
   education: {
     college: "Rabindranath Tagore University",
-    degree: "Bachelor of Technology (B.Tech)",
-    year: "2nd Year",
+    degree: "Bachelor of Engineering (B.E.)",
+    year: "3rd Year",
     field: "Computer Science and Engineering",
     courses: ["Data Structures", "Algorithms", "DBMS", "Operating Systems", "Web Development", "Computer Networks"],
   },
   certifications: [
-    { name: "Software Engineer Internship", issuer: "Practical Software Development", date: "Recent", description: "Internship-based practical experience in API testing, bug reporting, and frontend development." },
-    { name: "Technical Project Development", issuer: "Learning Certifications", date: "Recent", description: "Certifications earned through real-world technical project development and implementation." },
-    { name: "Junior Cybersecurity Analyst", issuer: "Cisco", date: "Recent", description: "Cybersecurity fundamentals, network defense, endpoint security, and threat analysis modules." },
+    { name: "Junior Cybersecurity Analyst", issuer: "Cisco Networking Academy", date: "Recent", description: "Cybersecurity fundamentals, network defense concepts, endpoint security, and threat analysis modules." },
+    { name: "Power BI Workshop", issuer: "Microsoft Learn", date: "Recent", description: "Practical workshop on data visualization, analytics, and building interactive dashboards with Power BI." },
   ],
   achievements: [
-    { title: "Software Engineering Internship", description: "Real-world industry experience in API testing, documentation, and bug lifecycle management." },
-    { title: "Real Client Project Exposure", description: "Developed and delivered projects for actual clients, gaining professional software engineering experience." },
-    { title: "Hackathon Participation", description: "Competed in hackathons, building innovative solutions under time constraints with cross-functional teams." },
+    { title: "2nd Position – Internal Hackathon", description: "Secured 2nd place in the Smart India Hackathon Qualifier." },
+    { title: "2nd Position – AI Hackathon", description: "Awarded 2nd place for building an innovative artificial intelligence solution under time constraints." },
   ],
   currentWork: [
-    "Entrepreneurship Club Website",
+    "RemotePhysios Healthcare Apps",
     "Scalable Campus Navigation Systems",
-    "API Documentation and Testing Workflow",
+    "BLE/IoT Device Integrations",
   ],
 }
-
