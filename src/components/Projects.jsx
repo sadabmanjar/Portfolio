@@ -5,16 +5,16 @@ import TiltCard from './ui/TiltCard';
 
 const ProjectCard = ({ project }) => {
   return (
-    <TiltCard className="bg-bg-card border border-border-main rounded-lg overflow-hidden flex flex-col hover:border-accent-cyan/50 transition-colors duration-300">
+    <TiltCard className="bg-bg-card border border-border-main rounded-lg flex flex-col hover:border-accent-cyan/50 transition-colors duration-300 relative z-10 hover:z-50">
       {/* Image with zoom */}
-      <div className="overflow-hidden h-48 w-full flex-shrink-0">
+      <div className="h-48 w-full flex-shrink-0 relative">
         <motion.img
           src={
             project.image ||
             `https://placehold.co/400x200/0d0d18/00e5ff?text=${encodeURIComponent(project.title)}`
           }
           alt={project.title}
-          className="w-full h-full object-cover"
+          className="w-full h-full object-cover rounded-t-lg shadow-lg"
           whileHover={{ scale: 1.12 }}
           transition={{ duration: 0.4, ease: 'easeOut' }}
         />

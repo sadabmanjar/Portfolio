@@ -81,7 +81,7 @@ const About = () => {
             </div>
             
             <p className="text-secondary leading-relaxed font-mono text-sm md:text-base">
-              I'm a 2nd-year B.Tech Engineering student and a Software Engineer Intern 
+              I'm a 3rd-year B.Tech Engineering student and a Software Engineer Intern 
               with hands-on experience in full-stack development, API testing, and 
               cybersecurity fundamentals. I've built real-world platforms like MoveCare 
               (a healthcare consultation app) and a Campus Navigation System — and I'm driven 
@@ -90,7 +90,7 @@ const About = () => {
 
             <div className="pt-4">
                <a href={personal.resumeUrl} target="_blank" rel="noopener noreferrer" className="inline-block border border-accent-cyan px-6 py-2 text-accent-cyan font-orbitron text-sm hover:bg-accent-cyan hover:text-black transition-all duration-300 shadow-neon-cyan/20 shadow-lg">
-                 DOWNLOAD_VITA
+                 RESUME
                </a>
             </div>
           </motion.div>
@@ -110,8 +110,8 @@ const About = () => {
           }}
           className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-20"
         >
-          <StatCard number="2" suffix="nd" label="Year B.Tech" />
-          <StatCard number="3" suffix="+" label="Projects Built" />
+          <StatCard number="3" suffix="rd" label="Year B.Tech" />
+          <StatCard number="6" suffix="+" label="Projects Built" />
           <StatCard number="2" suffix="" label="Work Experiences" />
           <StatCard number="3" label="Certifications" />
         </motion.div>
